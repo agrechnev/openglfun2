@@ -5,3 +5,4 @@ set (CMAKE_CXX_STANDARD 14)
 
 # Add all examples
 add_subdirectory(triangle)
+add_subdirectory(fun1)
