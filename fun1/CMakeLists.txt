@@ -14,6 +14,7 @@ set (SOURCE_FILES
       ./fun1.cpp
       ./Window.cpp ./Window.h
       ./ShaderProg.cpp ./ShaderProg.h
+      ./IVao.h
       )
       
       

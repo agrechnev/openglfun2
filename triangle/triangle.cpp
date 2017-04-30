@@ -158,6 +158,10 @@ int main(){
         // Draw the window (note : here's GLFW, not GL !)
         glfwSwapBuffers(window);
     }
+
+    // Delete VAO, VBO
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
     
     glfwTerminate();
     return 0;

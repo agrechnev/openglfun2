@@ -7,7 +7,6 @@
 namespace MotokoGL{
 Window::Window(int w, int h, const char *title)
 {
-
     // Init GLFW
     glfwInit();
 
