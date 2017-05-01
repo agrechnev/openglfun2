@@ -1,12 +1,8 @@
 #pragma once
 // By Oleksiy Grechnyev
 
-// OpenGL Headers
-// GLEW
-#define GLEW_STATIC
-#include <GL/glew.h>
-// GLFW (after GLEW)
-#include <GLFW/glfw3.h>
+#include "./glheader.h"
+
 
 namespace MotokoGL{
 /// Shader program and compiling shaders

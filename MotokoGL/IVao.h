@@ -9,6 +9,6 @@ public: //==== Abstract methods
     virtual void draw() = 0;
 
     /// Optional Destructor
-    virtual ~draw() {}
+    virtual ~IVao() {}
 };
 }
