@@ -17,7 +17,7 @@ inline void fatal(const char * msg){
 }
 //=============================================================
 inline void fatal2(const char * msg1, const char * msg2){
-    std::cerr << msg1 << " : " << std::endl;
+    std::cerr << msg1 << " : " << msg2 << std::endl;
     glfwTerminate();
     exit(-1);
 }

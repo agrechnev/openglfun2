@@ -15,12 +15,12 @@ public: // ====== Constructor =====
     /**
      * @brief Vao constructor
      *
-     * Signature example : {3, 0, 2}. Means the following arrays, this is XYZ_ST data:
+     * Signature example : {3, 0, 2}. Means the following arrays, use this for XYZ_ST data:
      * 0: 3 elements
      * 1: none
      * 2: 2 elements
      *
-     * Or {3,3,2} for the XYZ_RGB_ST data
+     * Or {3,3,2} for the XYZ_RGB_ST data, {3,3} for XYZ_RGB, {3} for XYZ etc.
      *
      * @param[in] signature         The signature (see above)
      * @param[in] vertices          Vertex array

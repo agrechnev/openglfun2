@@ -1,9 +1,14 @@
-#include "ShaderProg.h"
+#include <iostream>
+#include <fstream>
+#include <streambuf>
 
 #include "./fatal.h"
 
-namespace MotokoGL{
+#include "./ShaderProg.h"
 
+
+namespace MotokoGL{
+//==============================================================
 ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmentSource)
 {
     ShaderProg newProg;
@@ -52,5 +57,40 @@ ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmen
 
     return newProg;
 }
+//==============================================================
+ShaderProg ShaderProg::fromFiles(const std::string & vertexFileName, const std::string & fragmentFileName)
+{
+    using namespace std;
+
+    auto s1 = parseFile(vertexFileName);
+    auto s2 = parseFile(fragmentFileName);
+
+    /*cout << "----------------" << endl;
+    cout << s1->c_str();
+    cout << "----------------" << endl;
+    cout << s2->c_str();
+    cout << "----------------" << endl;*/
+
+    ShaderProg newProg = ShaderProg::fromMem(s1->c_str(), s2->c_str());
+    return newProg;
+}
+//==============================================================
+std::shared_ptr<std::string> ShaderProg::parseFile(const std::string &fileName)
+{
+    using namespace std;
+
+    ifstream in(fileName);
+
+    if (!in)
+        fatal2("ShaderProg::parseFile() : cannot open file ", fileName.c_str());
+
+    shared_ptr<string> s = make_shared<string>((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
+
+    in.close();
+
+    return s;
+}
+//==============================================================
+
 
 }

@@ -3,6 +3,10 @@ project (fun1)
 
 set (CMAKE_CXX_STANDARD 14)
 
+# Copy directories
+file(COPY shaders DESTINATION .)
+
+
 # Source files
 set (SOURCE_FILES
       ./fun1.cpp

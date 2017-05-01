@@ -10,12 +10,19 @@ FIND_LIBRARY(GL_LIB NAMES gl GL opengl opengl32)
 
 set (GL_LIBS ${GLFW_LIB} ${GLEW_LIB} ${GL_LIB})
 
-# Set include dir
-include_directories(MotokoGL)
+# Set include dirs
+include_directories(
+    MotokoGL 
+    Soil
+)
 
-# Build library
+# Build SOIL library
+add_subdirectory(Soil)
+
+# Build MotokoGL library
 add_subdirectory(MotokoGL)
 
 # Build all examples
 add_subdirectory(triangle)
 add_subdirectory(fun1)
+add_subdirectory(fun2)

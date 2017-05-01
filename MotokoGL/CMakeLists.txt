@@ -11,6 +11,8 @@ set (SOURCE_FILES
       ./ShaderProg.cpp ./ShaderProg.h
       ./IVao.h
       ./Vao.h ./Vao.cpp
+      ./texture.h ./texture.cpp
+      ./MotokoGL.h
       )
 
 add_library(MotokoGL ${SOURCE_FILES})

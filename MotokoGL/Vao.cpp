@@ -53,12 +53,12 @@ Vao::Vao(const std::vector<unsigned> & signature,
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
     }
 
-    // Loop over all signature elements
+    // Loop over all signature elements (aka GL array indices)
     unsigned pos = 0; // Current position in the data
     for (GLuint i = 0; i < signature.size(); ++i){
         unsigned n = signature[i]; // Number of elements
 
-        if (n) {  // Skip if n=0
+        if (n) {  // Skip if n==0
             glVertexAttribPointer(i, n, GL_FLOAT, GL_FALSE,
                                   sigSum*sizeof(GLfloat), (GLvoid *)(pos*sizeof(GLfloat)));
             glEnableVertexAttribArray(i); // Enable this index
