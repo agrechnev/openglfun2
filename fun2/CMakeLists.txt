@@ -13,4 +13,4 @@ set (SOURCE_FILES
       )
 
 add_executable(fun2 ${SOURCE_FILES})
-target_link_libraries(fun2 MotokoGL ${GL_LIBS})
+target_link_libraries(fun2 MotokoGL Soil ${GL_LIBS})

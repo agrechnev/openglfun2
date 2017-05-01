@@ -1,8 +1,12 @@
 #version 330 core
 
 in vec3 pColor;
+in vec2 pTexCoord;
+
 out vec4 color;
 
+uniform sampler2D uTex;
+
 void main(){
-    color = vec4(pColor, 1.0f);
+    color = texture(uTex, pTexCoord);
 }

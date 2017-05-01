@@ -51,15 +51,17 @@ int main(){
 
     // Some funny vertices
 
-    // XYZ_RGB
+    // XYZ_RGB_ST
     GLfloat vert[] = {
-        -0.5f,-0.5f, 0.0f, 1.0f, 0.0f, 0.0f,
-         0.5f,-0.5f, 0.0f, 0.0f, 1.0f, 0.0f,
-        -0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f
+        // Positions          // Colors           // Texture Coords
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top Right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom Right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // Bottom Left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left
     };
 
     // VAO
-    Vao vao({3, 3}, vert, sizeof(vert));
+    Vao vao({3, 3, 2}, vert, sizeof(vert), indicesSq, sizeof(indicesSq));
 
 
     // VAO for square (EBO)
@@ -70,6 +72,11 @@ int main(){
     
     // If you want wireframe
     //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+    //-------------------------------------------
+    // Texture
+
+    GLuint tex = loadTexture("common_textures/container.jpg");
 
     //-------------------------------------------
     // GLFW game loop
@@ -87,7 +94,9 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT);
         
         // Draw our model
+        glBindTexture(GL_TEXTURE_2D, tex);
         prog.use();
+
         vao.draw();
 
         glBindVertexArray(0);
