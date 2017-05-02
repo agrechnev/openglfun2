@@ -21,6 +21,16 @@ public: //======== Methods
         return glfwWindowShouldClose(win);
     }
 
+    int getWidth() const
+    {
+        return width;
+    }
+
+    int getHeight() const
+    {
+        return height;
+    }
+
 private: //========= Fields
     /// The Window pointer
     GLFWwindow * win = nullptr;

@@ -41,4 +41,5 @@ Window::Window(int w, int h, const char *title)
     // The first OpenGL function call: init viewport
     glViewport(0, 0, width, height);
 }
+
 }

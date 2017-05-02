@@ -6,6 +6,8 @@
 #include <iostream>
 #include <string>
 #include <cmath>
+#include <ctime>
+#include <cstdlib>
 
 // GLM
 #include <glm/glm.hpp>
@@ -20,12 +22,34 @@ inline static GLfloat funCos(GLfloat x){
     return 0.5f*(cosf(x) + 1);
 }
 //=============================================================
+
+//float random number between 0.0f and 1.0f
+float randf(){
+    return (float)rand()/(float)RAND_MAX;
+}
+//=============================================================
+
+// Random unit 3-vector with spherical distribution
+glm::vec3 randUV3(){
+    float t = acos(2*randf()-1);
+    float p=M_PI*2*randf();
+    glm::vec3 result(sin(t)*cos(p), sin(t)*sin(p), cos(t));
+    return result;
+}
+//=============================================================
 int main(){
     using namespace MotokoGL;
     using namespace glm;
     using namespace std;
 
-    Window window(800, 600, "Goblin OpenGL Fun 2");
+    // Seed random number generator
+    srand(time(NULL));
+
+    // Create window
+    Window window(1000, 800, "Goblin OpenGL Fun 2");
+    const float aspectRatio = 1.0f*window.getWidth()/window.getHeight();
+
+    glEnable(GL_DEPTH_TEST); // Enable depth test, important
     
     //-------------------------------------------
     // Shaders
@@ -37,39 +61,54 @@ int main(){
     //-------------------------------------------
     // Model, VBO, VAO
     //-------------------------------------------
-    // One triangle, w/o EBO
-    GLfloat verticesTr[] = {
-        -0.5f, -0.5f, 0.0f,
-        0.5f, -0.5f, 0.0f,
-        0.0f,  0.5f, 0.0f
-    };
 
-    // Square, with EBO
-    GLfloat verticesSq[] = {
-        0.5f,  0.5f, 0.0f, // UR
-        0.5f, -0.5f, 0.0f, // LR
-        -0.5f, -0.5f, 0.0f, // LL
-        -0.5f,  0.5f, 0.0f  // UL
-    };
-    GLuint indicesSq[] = {
-        0, 1, 3,
-        1, 2, 3
-    };
-
-
-    // Some funny vertices
-
-    // XYZ_RGB_ST
+    // A cube XYZ_ST
     GLfloat vert[] = {
-        // Positions          // Colors           // Texture Coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.00f, 1.00f,   // Top Right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.00f, 0.00f,   // Bottom Right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.00f, 0.00f,   // Bottom Left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.00f, 1.00f    // Top Left
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
 
     // VAO
-    Vao vao({3, 3, 2}, vert, sizeof(vert), indicesSq, sizeof(indicesSq));
+    Vao vao({3, 0, 2}, vert, sizeof(vert));
 
 
     // VAO for square (EBO)
@@ -88,10 +127,33 @@ int main(){
     Tex tex2 = Tex::fromFile("common_textures/awesomeface.png");
 
     //-------------------------------------------
+    // Cube positions
+    glm::vec3 cubePositions[] = {
+        glm::vec3( 0.0f,  0.0f,  0.0f),
+        glm::vec3( 2.0f,  5.0f, -15.0f),
+        glm::vec3(-1.5f, -2.2f, -2.5f),
+        glm::vec3(-3.8f, -2.0f, -12.3f),
+        glm::vec3( 2.4f, -0.4f, -3.5f),
+        glm::vec3(-1.7f,  3.0f, -7.5f),
+        glm::vec3( 1.3f, -2.0f, -2.5f),
+        glm::vec3( 1.5f,  2.0f, -2.5f),
+        glm::vec3( 1.5f,  0.2f, -1.5f),
+        glm::vec3(-1.3f,  1.0f, -1.5f)
+    };
+
+    // Random rotation axes and velocities
+    vec3 cubeAxes[10];
+    float cubeAV[10]; // Angular velocities
+    float cubeMV[10]; // Mix velocities
+    // Loop over 10 cubes
+    for (int cube=0; cube<10; cube++) {
+        cubeAV[cube] = 4.0f*randf()-2.0f; // Between -2 and 2 RADIAN / time unit
+        cubeMV[cube] = 3.0f*randf()+1.0f;
+        cubeAxes[cube] = randUV3(); // Random unit vector
+    }
+
+    //-------------------------------------------
     // GLFW game loop
-
-    // Uniform locations, if any
-
     while (!window.shouldClose() ){
         glfwPollEvents(); // Events
         GLfloat t = glfwGetTime(); // Time in seconds
@@ -100,7 +162,7 @@ int main(){
         
         // Clear screen
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f); // RGBA
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Draw our model
         prog.use();
@@ -111,27 +173,36 @@ int main(){
         tex2.bind(1);
         glUniform1i(prog.loc("uTex2"), 1);
 
-        glUniform1f(prog.loc("uMix"), funCos(t));
+        //        glUniform1f(prog.loc("uMix"), funCos(t)*sqrtf(1.0*i));
 
-        // Draw object 1
-        // Transformations
-        mat4 tran;
-        tran = translate(tran, vec3(-0.5, -0.5, 0.0));
-        tran = rotate(tran, sqrtf(2.0)*t, vec3(0.0, 0.0, 1.0));
-        tran = scale(tran, vec3(0.5, 0.5, 0.5));
-        glUniformMatrix4fv(prog.loc("uTran"), 1, GL_FALSE, value_ptr(tran));
-        vao.draw(); // Draw
 
-        // Draw object 2
-        // Transformations
-        tran = mat4();
-        tran = translate(tran, vec3(0.5, 0.5, 0.0));
-        tran = rotate(tran, 0.2f, vec3(0.0, 0.0, 1.0));
-        float scl = funCos(sqrtf(3.0)*t);
+        // Set up camera
+        // View matrix
+        mat4 view;
+        view = translate(view, vec3(0.0f, 0.0f, -4.0f));
+        glUniformMatrix4fv(prog.loc("uView"), 1, GL_FALSE, value_ptr(view));
 
-        tran = scale(tran, vec3(scl, scl, scl));
-        glUniformMatrix4fv(prog.loc("uTran"), 1, GL_FALSE, value_ptr(tran));
-        vao.draw(); // Draw
+        // Projection matrix
+        mat4 proj;
+        proj = perspective(0.8f, aspectRatio, 0.1f, 100.0f);
+        glUniformMatrix4fv(prog.loc("uProj"), 1, GL_FALSE, value_ptr(proj));
+
+
+        // Draw 10 cubes
+        for (int i=0; i<10; i++){
+
+            // Texture mix: fun
+            glUniform1f(prog.loc("uMix"), funCos(t*cubeMV[i]));
+
+            // Model matrix
+            mat4 model;
+            model = translate(model, cubePositions[i]);
+            model = rotate(model, t*cubeAV[i], cubeAxes[i]); // Rotate
+            glUniformMatrix4fv(prog.loc("uModel"), 1, GL_FALSE, value_ptr(model));
+
+
+            vao.draw(); // Draw
+        }
 
         // Draw the window (Swap buffers)
         window.swapBuffers();
