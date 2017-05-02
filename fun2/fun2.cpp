@@ -54,10 +54,10 @@ int main(){
     // XYZ_RGB_ST
     GLfloat vert[] = {
         // Positions          // Colors           // Texture Coords
-         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // Top Right
-         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // Bottom Right
-        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // Bottom Left
-        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // Top Left
+         0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.00f, 1.00f,   // Top Right
+         0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.00f, 0.00f,   // Bottom Right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.00f, 0.00f,   // Bottom Left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.00f, 1.00f    // Top Left
     };
 
     // VAO
@@ -76,7 +76,8 @@ int main(){
     //-------------------------------------------
     // Texture
 
-    GLuint tex = loadTexture("common_textures/container.jpg");
+    Tex tex1 = Tex::fromFile("common_textures/container.jpg");
+    Tex tex2 = Tex::fromFile("common_textures/awesomeface.png");
 
     //-------------------------------------------
     // GLFW game loop
@@ -92,11 +93,17 @@ int main(){
         // Clear screen
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f); // RGBA
         glClear(GL_COLOR_BUFFER_BIT);
-        
-        // Draw our model
-        glBindTexture(GL_TEXTURE_2D, tex);
-        prog.use();
 
+        // Set up textures
+        tex1.bind(0);
+        glUniform1i(prog.loc("uTex1"), 0);
+        tex2.bind(1);
+        glUniform1i(prog.loc("uTex2"), 1);
+
+        glUniform1f(prog.loc("uMix"), funCos(t));
+
+        // Draw our model
+        prog.use();
         vao.draw();
 
         glBindVertexArray(0);

@@ -10,5 +10,5 @@ out vec2 pTexCoord;
 void main(){
     gl_Position=vec4(pos, 1.0f);
     pColor=color;
-    pTexCoord=texCoord;
+    pTexCoord = vec2(texCoord.x, 1.0f - texCoord.y);
 }

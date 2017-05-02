@@ -8,5 +8,5 @@
 #include "./Window.h"
 #include "./ShaderProg.h"
 #include "./Vao.h"
-#include "./texture.h"
+#include "./Tex.h"
 

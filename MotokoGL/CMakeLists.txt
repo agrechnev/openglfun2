@@ -11,7 +11,7 @@ set (SOURCE_FILES
       ./ShaderProg.cpp ./ShaderProg.h
       ./IVao.h
       ./Vao.h ./Vao.cpp
-      ./texture.h ./texture.cpp
+      ./Tex.h ./Tex.cpp
       ./MotokoGL.h
       )
 
