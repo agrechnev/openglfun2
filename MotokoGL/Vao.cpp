@@ -83,6 +83,8 @@ void Vao::draw() {
         // Draw w/o ebo
         glDrawArrays(GL_TRIANGLES, 0, count);
     }
+
+    glBindVertexArray(0);
 }
 //=================================================================
 

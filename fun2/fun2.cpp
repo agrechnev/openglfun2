@@ -7,15 +7,23 @@
 #include <string>
 #include <cmath>
 
+// GLM
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+// MotokoGL
 #include "MotokoGL.h"
 
 //=============================================================
 inline static GLfloat funCos(GLfloat x){
-    return 0.5f*(cos(x) + 1);
+    return 0.5f*(cosf(x) + 1);
 }
 //=============================================================
 int main(){
     using namespace MotokoGL;
+    using namespace glm;
+    using namespace std;
 
     Window window(800, 600, "Goblin OpenGL Fun 2");
     
@@ -94,6 +102,9 @@ int main(){
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f); // RGBA
         glClear(GL_COLOR_BUFFER_BIT);
 
+        // Draw our model
+        prog.use();
+
         // Set up textures
         tex1.bind(0);
         glUniform1i(prog.loc("uTex1"), 0);
@@ -102,12 +113,26 @@ int main(){
 
         glUniform1f(prog.loc("uMix"), funCos(t));
 
-        // Draw our model
-        prog.use();
-        vao.draw();
+        // Draw object 1
+        // Transformations
+        mat4 tran;
+        tran = translate(tran, vec3(-0.5, -0.5, 0.0));
+        tran = rotate(tran, sqrtf(2.0)*t, vec3(0.0, 0.0, 1.0));
+        tran = scale(tran, vec3(0.5, 0.5, 0.5));
+        glUniformMatrix4fv(prog.loc("uTran"), 1, GL_FALSE, value_ptr(tran));
+        vao.draw(); // Draw
 
-        glBindVertexArray(0);
-        
+        // Draw object 2
+        // Transformations
+        tran = mat4();
+        tran = translate(tran, vec3(0.5, 0.5, 0.0));
+        tran = rotate(tran, 0.2f, vec3(0.0, 0.0, 1.0));
+        float scl = funCos(sqrtf(3.0)*t);
+
+        tran = scale(tran, vec3(scl, scl, scl));
+        glUniformMatrix4fv(prog.loc("uTran"), 1, GL_FALSE, value_ptr(tran));
+        vao.draw(); // Draw
+
         // Draw the window (Swap buffers)
         window.swapBuffers();
     }

@@ -7,8 +7,10 @@ layout (location=2) in vec2 texCoord;
 out vec3 pColor;
 out vec2 pTexCoord;
 
+uniform mat4 uTran;
+
 void main(){
-    gl_Position=vec4(pos, 1.0f);
+    gl_Position = uTran*vec4(pos, 1.0f);
     pColor=color;
     pTexCoord = vec2(texCoord.x, 1.0f - texCoord.y);
 }
