@@ -9,13 +9,12 @@
 #include <ctime>
 #include <cstdlib>
 
-// GLM
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-
 // MotokoGL
 #include "MotokoGL.h"
+
+//=============================================================
+// Globals (if any)
+
 
 //=============================================================
 inline static GLfloat funCos(GLfloat x){
@@ -24,15 +23,15 @@ inline static GLfloat funCos(GLfloat x){
 //=============================================================
 
 //float random number between 0.0f and 1.0f
-float randf(){
+inline static float randf(){
     return (float)rand()/(float)RAND_MAX;
 }
 //=============================================================
 
 // Random unit 3-vector with spherical distribution
-glm::vec3 randUV3(){
+static glm::vec3 randUV3(){
     float t = acos(2*randf()-1);
-    float p=M_PI*2*randf();
+    float p = M_PI*2*randf();
     glm::vec3 result(sin(t)*cos(p), sin(t)*sin(p), cos(t));
     return result;
 }
@@ -153,7 +152,15 @@ int main(){
     }
 
     //-------------------------------------------
+    // Camera
+    SimpleCamera camera;
+    camera.aspect = aspectRatio;
+
+
+    //-------------------------------------------
+    //-------------------------------------------
     // GLFW game loop
+    //-------------------------------------------
     while (!window.shouldClose() ){
         glfwPollEvents(); // Events
         GLfloat t = glfwGetTime(); // Time in seconds
@@ -164,7 +171,9 @@ int main(){
         glClearColor(0.0f, 0.0f, 1.0f, 1.0f); // RGBA
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Draw our model
+        // Prepare to draw the model
+
+        // Use program
         prog.use();
 
         // Set up textures
@@ -173,20 +182,14 @@ int main(){
         tex2.bind(1);
         glUniform1i(prog.loc("uTex2"), 1);
 
-        //        glUniform1f(prog.loc("uMix"), funCos(t)*sqrtf(1.0*i));
+        // Set up the camera pos
+        GLfloat radius = 10.0;
+        camera.pos[0] = radius*sinf(t);
+        camera.pos[2] = radius*cosf(t);
 
-
-        // Set up camera
-        // View matrix
-        mat4 view;
-        view = translate(view, vec3(0.0f, 0.0f, -4.0f));
-        glUniformMatrix4fv(prog.loc("uView"), 1, GL_FALSE, value_ptr(view));
-
-        // Projection matrix
-        mat4 proj;
-        proj = perspective(0.8f, aspectRatio, 0.1f, 100.0f);
-        glUniformMatrix4fv(prog.loc("uProj"), 1, GL_FALSE, value_ptr(proj));
-
+        // Camera matrix
+        mat4 cam = camera.matrix();
+        glUniformMatrix4fv(prog.loc("uCam"), 1, GL_FALSE, value_ptr(cam));
 
         // Draw 10 cubes
         for (int i=0; i<10; i++){

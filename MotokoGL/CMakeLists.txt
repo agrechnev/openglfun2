@@ -12,6 +12,7 @@ set (SOURCE_FILES
       ./IVao.h
       ./Vao.h ./Vao.cpp
       ./Tex.h ./Tex.cpp
+      ./SimpleCamera.h
       ./MotokoGL.h
       )
 

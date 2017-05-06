@@ -9,4 +9,5 @@
 #include "./ShaderProg.h"
 #include "./Vao.h"
 #include "./Tex.h"
+#include "./SimpleCamera.h"
 
