@@ -52,8 +52,14 @@ ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmen
         glGetShaderInfoLog(prog, 512, nullptr, infoLog);
         fatal2("Cannot link shader program", infoLog);
     }
+
+    // Delete shaders
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    // Set uniforms
+    newProg.uCam = newProg.loc("uCam");
+    newProg.uModel = newProg.loc("uModel");
 
     return newProg;
 }

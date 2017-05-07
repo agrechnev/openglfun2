@@ -1,5 +1,5 @@
 // By Oleksiy Grechnyev
-// FUN2: More FUN with OpenGL
+// FUN2: More FUN with OpenGL: Camera, textures, rotating cubes
 
 
 // System headers
@@ -11,10 +11,6 @@
 
 // MotokoGL
 #include "MotokoGL.h"
-
-//=============================================================
-// Globals (if any)
-
 
 //=============================================================
 inline static GLfloat funCos(GLfloat x){
@@ -189,7 +185,6 @@ int main(){
 
         // Camera matrix
         mat4 cam = camera.matrix();
-        glUniformMatrix4fv(prog.loc("uCam"), 1, GL_FALSE, value_ptr(cam));
 
         // Draw 10 cubes
         for (int i=0; i<10; i++){
@@ -201,9 +196,8 @@ int main(){
             mat4 model;
             model = translate(model, cubePositions[i]);
             model = rotate(model, t*cubeAV[i], cubeAxes[i]); // Rotate
-            glUniformMatrix4fv(prog.loc("uModel"), 1, GL_FALSE, value_ptr(model));
 
-
+            prog.setMat(cam, model); // Set matrices
             vao.draw(); // Draw
         }
 
