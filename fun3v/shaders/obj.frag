@@ -20,7 +20,6 @@ void main(){
     vec3 norm = normalize(pNorm);
     vec3 lightDir = normalize(uLightPos - pFragPos);
     float diff = max(dot(norm, lightDir), 0.0f);
-    //float diff = abs(dot(norm, lightDir));
     
     vec3 diffuse = diffuseStr * diff * uLightC;
     

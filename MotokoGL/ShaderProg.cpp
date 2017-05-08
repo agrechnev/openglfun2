@@ -60,6 +60,8 @@ ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmen
     // Set uniforms
     newProg.uCam = newProg.loc("uCam");
     newProg.uModel = newProg.loc("uModel");
+    newProg.uView = newProg.loc("uView");
+    newProg.uProj = newProg.loc("uProj");
 
     return newProg;
 }

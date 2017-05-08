@@ -1,5 +1,6 @@
 // By Oleksiy Grechnyev
-// FUN3: FUN with OpenGL: Basic Lighting: Phong in World Space
+// FUN3P: FUN with OpenGL: Basic Lighting: Phong in World Space
+// Phong lighting version
 
 // System headers
 #include <iostream>
@@ -44,7 +45,7 @@ int main(){
     srand(time(NULL));
 
     // Create window
-    Window window(1000, 800, "Goblin OpenGL Fun 3");
+    Window window(1000, 800, "Goblin OpenGL Fun 3P");
     const float aspectRatio = 1.0f*window.getWidth()/window.getHeight();
 
     glEnable(GL_DEPTH_TEST); // Enable depth test, important

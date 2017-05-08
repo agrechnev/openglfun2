@@ -1,5 +1,5 @@
 // By Oleksiy Grechnyev
-// FUN3: FUN with OpenGL: Basic Lighting: Phong in World Space
+// FUN4: FUN with OpenGL: Basic Lighting: Phong in World Space + Materials
 
 // System headers
 #include <iostream>
@@ -44,7 +44,7 @@ int main(){
     srand(time(NULL));
 
     // Create window
-    Window window(1000, 800, "Goblin OpenGL Fun 3");
+    Window window(1000, 800, "Goblin OpenGL Fun 4");
     const float aspectRatio = 1.0f*window.getWidth()/window.getHeight();
 
     glEnable(GL_DEPTH_TEST); // Enable depth test, important
@@ -64,16 +64,16 @@ int main(){
     // A cube XYZ_NORMAL
     GLfloat vert[] = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-         0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
         -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
         -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-         0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
         -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
         -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
 
@@ -84,24 +84,24 @@ int main(){
         -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
         -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
         -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-         0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
         -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
         -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-         0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
         -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
     };
@@ -117,6 +117,16 @@ int main(){
     //    Tex tex1 = Tex::fromFile("common_textures/container.jpg");
     //    Tex tex2 = Tex::fromFile("common_textures/awesomeface.png");
 
+
+    //-------------------------------------------
+    // Material
+
+    Material material = {
+        {1.0f, 0.5f, 0.31f},
+        {1.0f, 0.5f, 0.31f},
+        {0.5f, 0.5f, 0.5f},
+        32.0f
+    };
 
     //-------------------------------------------
     // Camera
@@ -182,6 +192,7 @@ int main(){
         model = rotate(model, t*0.7f, vec3(1.0f, 0.5f, 0.0f)); // Rotate
 
         objProg.setMat(cam, model);
+        objProg.setMaterial(material);
         objVao.draw(); // Draw
 
         // Draw the window (Swap buffers)

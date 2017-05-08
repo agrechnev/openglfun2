@@ -10,4 +10,5 @@
 #include "./Vao.h"
 #include "./Tex.h"
 #include "./SimpleCamera.h"
+#include "./Material.h"
 

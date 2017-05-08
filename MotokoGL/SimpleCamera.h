@@ -8,10 +8,10 @@ namespace MotokoGL {
 class SimpleCamera {
 public: //======== Methods
 
-    // Create the camera matrix using our data
+    // Create the camera matrix (proj*view) using our data
     virtual glm::mat4 matrix(){
         using namespace glm;
-        vec3 dir = normalize(pos - target); // The camera direction (from target to pos)
+//        vec3 dir = normalize(pos - target); // The camera direction (from target to pos)
 
         // View matrix
         mat4 view = lookAt(pos, target, up);
@@ -20,6 +20,20 @@ public: //======== Methods
         mat4 proj = perspective(0.8f, aspect, zMin, zMax);
 
         return proj*view;
+    }
+
+    // Create the view matrix
+    virtual glm::mat4 matrixView(){
+        using namespace glm;
+
+        return lookAt(pos, target, up);
+    }
+
+    // Create the proj matrix
+    virtual glm::mat4 matrixProj(){
+        using namespace glm;
+
+        return perspective(0.8f, aspect, zMin, zMax);
     }
 
 public: //======== Getters + setters

@@ -1,5 +1,7 @@
 // By Oleksiy Grechnyev
-// FUN3: FUN with OpenGL: Basic Lighting: Phong in World Space
+// FUN3V: FUN with OpenGL: Basic Lighting: Phong in View Space (not World like in FUN3)
+// Again, this version uses View coordinates for Lighting
+// Frag shaders can be the same actually
 
 // System headers
 #include <iostream>
@@ -44,7 +46,7 @@ int main(){
     srand(time(NULL));
 
     // Create window
-    Window window(1000, 800, "Goblin OpenGL Fun 3");
+    Window window(1000, 800, "Goblin OpenGL Fun 3V");
     const float aspectRatio = 1.0f*window.getWidth()/window.getHeight();
 
     glEnable(GL_DEPTH_TEST); // Enable depth test, important
@@ -153,8 +155,9 @@ int main(){
         // Set up the camera pos if needed
         camera.pos = vec3(2.0f, 2.0f, 7.0f);
 
-        // Camera matrix
-        mat4 cam = camera.matrix();
+        // View and proj matrices (camera)
+        mat4 view = camera.matrixView();
+        mat4 proj = camera.matrixProj();
 
         // Model matrix
         mat4 model;
@@ -165,7 +168,7 @@ int main(){
         model = translate(model, lampPos); // To position
         model = scale(model, vec3(0.2f)); // Smaller
 
-        lampProg.setMat(cam, model);
+        lampProg.setMatMVP(model, view, proj);
         lampVao.draw();
 
         //===== Draw the cube
@@ -174,14 +177,18 @@ int main(){
         // Set colors
         glUniform3f(objProg.loc("uObjectC"), 1.0f, 0.5f, 0.31f);
         glUniform3f(objProg.loc("uLightC"), 1.0f, 1.0f, 1.0f);
-        glUniform3fv(objProg.loc("uLightPos"), 1, value_ptr(lampPos));
-        glUniform3fv(objProg.loc("uCamPos"), 1, value_ptr(camera.pos));
 
-        //            model = translate(model, cubePositions[i]);
+        // Light position in view coords
+        vec3 lightPosV = vec3(view*vec4(lampPos, 1.0f));
+        glUniform3fv(objProg.loc("uLightPos"), 1, value_ptr(lightPosV));
+        // Camera is at 0 in view coords
+        glUniform3f(objProg.loc("uCamPos"), 0.0f, 0.0f, 0.0f);
+
+        //           model = translate(model, cubePositions[i]);
         model = mat4();
         model = rotate(model, t*0.7f, vec3(1.0f, 0.5f, 0.0f)); // Rotate
 
-        objProg.setMat(cam, model);
+        objProg.setMatMVP(model, view, proj);
         objVao.draw(); // Draw
 
         // Draw the window (Swap buffers)

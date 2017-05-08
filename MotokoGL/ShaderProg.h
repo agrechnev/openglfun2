@@ -4,6 +4,7 @@
 #include <string>
 #include <memory>
 
+#include "./Material.h"
 #include "./glheader.h"
 
 
@@ -33,10 +34,25 @@ public: //==== Methods
         return glGetUniformLocation(prog, uniformName.c_str());
     }
 
-    /// Set model and cam matrices (uniforms uModel, uCam)
+    /// Set cam and model  matrices (uniforms uCam, uModel)
     void setMat(const glm::mat4 & cam, const glm::mat4 & model){
         glUniformMatrix4fv(uCam, 1, GL_FALSE, value_ptr(cam));
         glUniformMatrix4fv(uModel, 1, GL_FALSE, value_ptr(model));
+    }
+
+    /// Set model, view, proj matrices (uniforms uModel, uView, uProj)
+    void setMatMVP(const glm::mat4 & model, const glm::mat4 & view, const glm::mat4 & proj){
+        glUniformMatrix4fv(uModel, 1, GL_FALSE, value_ptr(model));
+        glUniformMatrix4fv(uView, 1, GL_FALSE, value_ptr(view));
+        glUniformMatrix4fv(uProj, 1, GL_FALSE, value_ptr(proj));
+    }
+
+    /// Set the material
+    void setMaterial(const Material & m){
+        glUniform3fv(loc("uMaterial.ambient"), 1, glm::value_ptr(m.ambient));
+        glUniform3fv(loc("uMaterial.diffuse"), 1, glm::value_ptr(m.diffuse));
+        glUniform3fv(loc("uMaterial.specular"), 1, glm::value_ptr(m.specular));
+        glUniform1f(loc("uMaterial.shininess"), m.shininess);
     }
 
 private: //==== Methods
@@ -47,7 +63,7 @@ private: //==== Fields
     /// The program's OpenGL id
     GLuint prog = 0;
     /// Uniforms
-    GLint uModel, uCam;
+    GLint uModel, uCam, uView, uProj;
 };
 }
 
