@@ -129,13 +129,17 @@ int main(){
     };
 
     //-------------------------------------------
+    // Light
+    Light light(
+            {1.2f, 1.0f, 2.0f},
+            {0.2f, 0.2f, 0.2f},
+            {0.5f, 0.5f, 0.5f},
+            {1.0f, 1.0f, 1.0f}
+    );
+    //-------------------------------------------
     // Camera
     SimpleCamera camera;
     camera.aspect = aspectRatio;
-
-    //-------------------------------------------
-    // Lamp position
-    vec3 lampPos(1.2f, 1.0f, 2.0f);
 
     //-------------------------------------------
     //-------------------------------------------
@@ -152,8 +156,6 @@ int main(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Prepare to draw the model
-
-
         // Set up textures
         //        tex1.bind(0);
         //        glUniform1i(prog.loc("uTex1"), 0);
@@ -172,8 +174,8 @@ int main(){
         //===== Draw the lamp
         lampProg.use(); // Use program
         model = mat4();
-        model = translate(model, lampPos); // To position
-        model = scale(model, vec3(0.2f)); // Smaller
+        model = translate(model, light.position); // To position
+        model = scale(model, vec3(0.1f)); // Smaller
 
         lampProg.setMat(cam, model);
         lampVao.draw();
@@ -181,18 +183,26 @@ int main(){
         //===== Draw the cube
         objProg.use(); // Use program
 
-        // Set colors
-        glUniform3f(objProg.loc("uObjectC"), 1.0f, 0.5f, 0.31f);
-        glUniform3f(objProg.loc("uLightC"), 1.0f, 1.0f, 1.0f);
-        glUniform3fv(objProg.loc("uLightPos"), 1, value_ptr(lampPos));
+        // Set camera pos
         glUniform3fv(objProg.loc("uCamPos"), 1, value_ptr(camera.pos));
 
         //            model = translate(model, cubePositions[i]);
+
+        // Set model matrix
         model = mat4();
-        model = rotate(model, t*0.7f, vec3(1.0f, 0.5f, 0.0f)); // Rotate
+        model = rotate(model, t*sqrtf(0.5f), vec3(1.0f, 0.5f, 0.0f)); // Rotate
 
         objProg.setMat(cam, model);
+
+        // Let's make some funny light color
+        vec3 lightColor(funCos(t*2), funCos(t*0.7), funCos(t*1.3));
+        light.ambient = lightColor * 0.2f;
+        light.diffuse = lightColor * 0.5f;
+        light.specular = lightColor;
+
+        // Set material and light
         objProg.setMaterial(material);
+        objProg.setLight(light);
         objVao.draw(); // Draw
 
         // Draw the window (Swap buffers)

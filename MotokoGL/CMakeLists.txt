@@ -15,6 +15,7 @@ set (SOURCE_FILES
       ./SimpleCamera.h
       ./Material.h
       ./MotokoGL.h
-      )
+      ./Light.h
+        )
 
 add_library(MotokoGL ${SOURCE_FILES})

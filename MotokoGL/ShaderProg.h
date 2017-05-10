@@ -4,8 +4,9 @@
 #include <string>
 #include <memory>
 
-#include "./Material.h"
 #include "./glheader.h"
+#include "./Material.h"
+#include "./Light.h"
 
 
 namespace MotokoGL{
@@ -53,6 +54,14 @@ public: //==== Methods
         glUniform3fv(loc("uMaterial.diffuse"), 1, glm::value_ptr(m.diffuse));
         glUniform3fv(loc("uMaterial.specular"), 1, glm::value_ptr(m.specular));
         glUniform1f(loc("uMaterial.shininess"), m.shininess);
+    }
+
+    /// Set the light
+    void setLight(const Light & l){
+        glUniform3fv(loc("uLight.position"), 1, glm::value_ptr(l.position));
+        glUniform3fv(loc("uLight.ambient"), 1, glm::value_ptr(l.ambient));
+        glUniform3fv(loc("uLight.diffuse"), 1, glm::value_ptr(l.diffuse));
+        glUniform3fv(loc("uLight.specular"), 1, glm::value_ptr(l.specular));
     }
 
 private: //==== Methods
