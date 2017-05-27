@@ -1,5 +1,5 @@
 // By Oleksiy Grechnyev
-// FUN4: FUN with OpenGL: Basic Lighting: Phong in World Space + Materials
+// FUN5: FUN with OpenGL: Basic Lighting: Material maps
 
 // System headers
 #include <iostream>
@@ -44,7 +44,7 @@ int main(){
     srand(time(NULL));
 
     // Create window
-    Window window(1000, 800, "Goblin OpenGL Fun 4");
+    Window window(1000, 800, "Goblin OpenGL Fun 5");
     const float aspectRatio = 1.0f*window.getWidth()/window.getHeight();
 
     glEnable(GL_DEPTH_TEST); // Enable depth test, important
@@ -61,86 +61,84 @@ int main(){
     // Model, VBO, VAO
     //-------------------------------------------
 
-    // A cube XYZ_NORMAL
+    // A cube XYZ_NORMAL_TEX
+
     GLfloat vert[] = {
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+        // Positions          // Normals           // Texture Coords
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
 
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+        0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
     };
 
+
     // VAO
-    // Note: we don't use textures at the moment, but can easily put them back
-    Vao objVao({3, 3}, vert, sizeof(vert));
-    Vao lampVao({3, 3}, vert, sizeof(vert));
+    // XYZ_NORM_TEX
+    Vao objVao({3, 3, 2}, vert, sizeof(vert));
+    Vao lampVao({3, 3, 2}, vert, sizeof(vert));
 
     //-------------------------------------------
-    // Textures
+    // Material + textures
 
-    //    Tex tex1 = Tex::fromFile("common_textures/container.jpg");
-    //    Tex tex2 = Tex::fromFile("common_textures/awesomeface.png");
-
-
-    //-------------------------------------------
-    // Material
-
-    Material material = {
-        {1.0f, 0.5f, 0.31f}, // Ambient
-        {1.0f, 0.5f, 0.31f}, // Diffuse
-        {0.5f, 0.5f, 0.5f},  // Specular
-        {0.0f, 0.0f, 0.0f},  // Emission
-        32.0f
+    Tex texAD = Tex::fromFile("common_textures/container2.png");
+    MaterialT materialT{
+                texAD,
+                texAD,
+                Tex::fromFile("common_textures/container2_specular.png"),
+                Tex::fromFile("common_textures/matrix.jpg"),
+                32.0f
     };
 
     //-------------------------------------------
     // Light
     Light light(
-            {1.2f, 1.0f, 2.0f},
-            {0.2f, 0.2f, 0.2f},
-            {0.5f, 0.5f, 0.5f},
-            {1.0f, 1.0f, 1.0f}
-    );
+    {1.2f, 1.0f, 2.0f},
+    {0.2f, 0.2f, 0.2f},
+    {0.5f, 0.5f, 0.5f},
+    {1.0f, 1.0f, 1.0f}
+                );
     //-------------------------------------------
     // Camera
     SimpleCamera camera;
     camera.aspect = aspectRatio;
+
 
     //-------------------------------------------
     //-------------------------------------------
@@ -175,13 +173,15 @@ int main(){
 
         //===== Draw the lamp
         lampProg.use(); // Use program
+
+        // Set model, cam
         model = mat4();
         model = translate(model, light.position); // To position
         model = scale(model, vec3(0.1f)); // Smaller
-
         lampProg.setMat(cam, model);
 
-        lampProg.setLight(light);
+        lampProg.setLight(light); // Set the light
+
         lampVao.draw(); // Draw lamp
 
         //===== Draw the cube
@@ -198,12 +198,13 @@ int main(){
 
         objProg.setMat(cam, model);
 
+        // Set material
+        objProg.setMaterialT(materialT);
 
-
-        // Set material and light
-        objProg.setMaterial(material);
+        // Set light
         objProg.setLight(light);
-        objVao.draw(); // Draw
+
+        objVao.draw(); // Draw cube
 
         // Draw the window (Swap buffers)
         window.swapBuffers();

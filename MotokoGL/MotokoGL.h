@@ -11,5 +11,6 @@
 #include "./Tex.h"
 #include "./SimpleCamera.h"
 #include "./Material.h"
+#include "./MaterialT.h"
 #include "./Light.h"
 

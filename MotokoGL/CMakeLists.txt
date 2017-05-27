@@ -14,6 +14,7 @@ set (SOURCE_FILES
       ./Tex.h ./Tex.cpp
       ./SimpleCamera.h
       ./Material.h
+      ./MaterialT.h
       ./MotokoGL.h
       ./Light.h
         )

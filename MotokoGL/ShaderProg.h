@@ -6,6 +6,7 @@
 
 #include "./glheader.h"
 #include "./Material.h"
+#include "./MaterialT.h"
 #include "./Light.h"
 
 
@@ -48,12 +49,31 @@ public: //==== Methods
         glUniformMatrix4fv(uProj, 1, GL_FALSE, value_ptr(proj));
     }
 
-    /// Set the material
+    /// Set the Material
     void setMaterial(const Material & m){
         glUniform3fv(loc("uMaterial.ambient"), 1, glm::value_ptr(m.ambient));
         glUniform3fv(loc("uMaterial.diffuse"), 1, glm::value_ptr(m.diffuse));
         glUniform3fv(loc("uMaterial.specular"), 1, glm::value_ptr(m.specular));
+        glUniform3fv(loc("uMaterial.emission"), 1, glm::value_ptr(m.emission));
         glUniform1f(loc("uMaterial.shininess"), m.shininess);
+    }
+
+    /// Set the MaterialT (with textures)
+    void setMaterialT(const MaterialT & m){
+
+        glUniform1i(loc("uMaterialT.ambient"), 0);
+        m.ambient.bind(0);
+
+        glUniform1i(loc("uMaterialT.diffuse"), 1);
+        m.diffuse.bind(1);
+
+        glUniform1i(loc("uMaterialT.specular"), 2);
+        m.specular.bind(2);
+
+        glUniform1i(loc("uMaterialT.emission"), 3);
+        m.emission.bind(3);
+
+        glUniform1f(loc("uMaterialT.shininess"), m.shininess);
     }
 
     /// Set the light
