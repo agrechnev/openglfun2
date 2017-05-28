@@ -118,13 +118,15 @@ int main(){
     // Material + textures
 
     Tex texAD = Tex::fromFile("common_textures/container2.png");
-    MaterialT materialT{
-                texAD,
-                texAD,
-                Tex::fromFile("common_textures/container2_specular.png"),
-                Tex::fromFile("common_textures/matrix.jpg"),
-                32.0f
-    };
+    MaterialT materialT(
+        texAD,
+        texAD,
+        Tex::fromFile("common_textures/container2_specular.png"),
+        Tex::fromFile("common_textures/matrix.jpg"),
+        32.0f,
+        //MaterialT::F_AMBIENT |  MaterialT::F_DIFFUSE | MaterialT::F_SPECULAR |  MaterialT::F_EMISSION
+        MaterialT::F_AMBIENT |  MaterialT::F_DIFFUSE | MaterialT::F_SPECULAR
+    );
 
     //-------------------------------------------
     // Light
@@ -178,7 +180,7 @@ int main(){
         model = mat4();
         model = translate(model, light.position); // To position
         model = scale(model, vec3(0.1f)); // Smaller
-        lampProg.setMat(cam, model);
+        lampProg.setMatCM(cam, model);
 
         lampProg.setLight(light); // Set the light
 
@@ -196,7 +198,8 @@ int main(){
         model = mat4();
         model = rotate(model, t*sqrtf(0.5f), vec3(1.0f, 0.5f, 0.0f)); // Rotate
 
-        objProg.setMat(cam, model);
+        objProg.setMatCM(cam, model);
+        objProg.setMatN(model);
 
         // Set material
         objProg.setMaterialT(materialT);

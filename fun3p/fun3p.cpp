@@ -166,7 +166,7 @@ int main(){
         model = translate(model, lampPos); // To position
         model = scale(model, vec3(0.2f)); // Smaller
 
-        lampProg.setMat(cam, model);
+        lampProg.setMatCM(cam, model);
         lampVao.draw();
 
         //===== Draw the cube
@@ -182,7 +182,7 @@ int main(){
         model = mat4();
         model = rotate(model, t*0.7f, vec3(1.0f, 0.5f, 0.0f)); // Rotate
 
-        objProg.setMat(cam, model);
+        objProg.setMatCM(cam, model);
         objVao.draw(); // Draw
 
         // Draw the window (Swap buffers)

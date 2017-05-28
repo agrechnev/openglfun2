@@ -37,7 +37,7 @@ public: //==== Methods
     }
 
     /// Set cam and model  matrices (uniforms uCam, uModel)
-    void setMat(const glm::mat4 & cam, const glm::mat4 & model){
+    void setMatCM(const glm::mat4 & cam, const glm::mat4 & model){
         glUniformMatrix4fv(uCam, 1, GL_FALSE, value_ptr(cam));
         glUniformMatrix4fv(uModel, 1, GL_FALSE, value_ptr(model));
     }
@@ -47,6 +47,12 @@ public: //==== Methods
         glUniformMatrix4fv(uModel, 1, GL_FALSE, value_ptr(model));
         glUniformMatrix4fv(uView, 1, GL_FALSE, value_ptr(view));
         glUniformMatrix4fv(uProj, 1, GL_FALSE, value_ptr(proj));
+    }
+
+    /// Set the normal matrix
+    void setMatN(const glm::mat4 & model){
+        glm::mat4 normal = glm::transpose(glm::inverse(model));
+        glUniformMatrix4fv(loc("uNorm"), 1, GL_FALSE, value_ptr(normal));
     }
 
     /// Set the Material
@@ -74,6 +80,7 @@ public: //==== Methods
         m.emission.bind(3);
 
         glUniform1f(loc("uMaterialT.shininess"), m.shininess);
+        glUniform1i(loc("uMaterialT.flags"), m.flags);
     }
 
     /// Set the light

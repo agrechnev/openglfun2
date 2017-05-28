@@ -179,7 +179,7 @@ int main(){
         model = translate(model, light.position); // To position
         model = scale(model, vec3(0.1f)); // Smaller
 
-        lampProg.setMat(cam, model);
+        lampProg.setMatCM(cam, model);
 
         lampProg.setLight(light);
         lampVao.draw(); // Draw lamp
@@ -196,9 +196,8 @@ int main(){
         model = mat4();
         model = rotate(model, t*sqrtf(0.5f), vec3(1.0f, 0.5f, 0.0f)); // Rotate
 
-        objProg.setMat(cam, model);
-
-
+        objProg.setMatCM(cam, model);
+        objProg.setMatN(model);
 
         // Set material and light
         objProg.setMaterial(material);

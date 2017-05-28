@@ -8,10 +8,11 @@ out vec3 pFragPos;
 
 uniform mat4 uCam;
 uniform mat4 uModel;
+uniform mat4 uNorm;
 
 void main(){
-    pNorm = mat3(uModel)*lNorm;
-    vec4 tmp = uModel*vec4(lPos, 1.0f);
+    pNorm = mat3(uNorm)*lNorm;  // Normal
+    vec4 tmp = uModel*vec4(lPos, 1.0f);  // Model position
     pFragPos = vec3(tmp);
-    gl_Position = uCam*tmp;
+    gl_Position = uCam*tmp;  // Camera
 }

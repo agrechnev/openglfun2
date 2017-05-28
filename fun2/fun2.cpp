@@ -197,7 +197,7 @@ int main(){
             model = translate(model, cubePositions[i]);
             model = rotate(model, t*cubeAV[i], cubeAxes[i]); // Rotate
 
-            prog.setMat(cam, model); // Set matrices
+            prog.setMatCM(cam, model); // Set matrices
             vao.draw(); // Draw
         }
 

@@ -10,9 +10,10 @@ out vec2 pTexCoord;
 
 uniform mat4 uCam;
 uniform mat4 uModel;
+uniform mat4 uNorm;
 
 void main(){
-    pNorm = mat3(uModel)*lNorm;    // Norm transformed (No Scaling !!!)
+    pNorm = mat3(uNorm)*lNorm;    // Norm transformed 
     vec4 tmp = uModel*vec4(lPos, 1.0f); 
     pFragPos = vec3(tmp);   // Frag position
     gl_Position = uCam*tmp; // View position
