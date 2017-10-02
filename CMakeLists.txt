@@ -6,9 +6,14 @@ set (CMAKE_CXX_STANDARD 14)
 # Fun with FIND_LIBRARY
 FIND_LIBRARY(GLFW_LIB NAMES glfw glfw3)
 FIND_LIBRARY(GLEW_LIB NAMES glew GLEW glew32)
-FIND_LIBRARY(GL_LIB NAMES gl GL opengl opengl32)
 
-set (GL_LIBS ${GLFW_LIB} ${GLEW_LIB} ${GL_LIB})
+find_package(OpenGL REQUIRED)
+message("OPENGL_gl_LIBRARY = ${OPENGL_gl_LIBRARY}")
+message("OPENGLu_gl_LIBRARY = ${OPENGL_glu_LIBRARY}")
+
+set(GL_LIBS  ${GLEW_LIB} ${GLFW_LIB} ${OPENGL_gl_LIBRARY})
+
+message("GL_LIBS = ${GL_LIBS}")
 
 # Set include dirs
 include_directories(
@@ -31,3 +36,4 @@ add_subdirectory(fun3v)
 add_subdirectory(fun3p)
 add_subdirectory(fun4)
 add_subdirectory(fun5)
+add_subdirectory(funbg)
