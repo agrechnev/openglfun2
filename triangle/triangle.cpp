@@ -24,9 +24,17 @@ static void fatal2(const char * msg1, const char * msg2){
     exit(-1);
 }
 //=============================================================
+// Error callback for GLFW
+static void errorCB(int i, const char * msg){
+    std::cerr << " errorCB : " << i << ":" << msg << std::endl;
+}
+//=============================================================
 int main(){
     // Init GLFW
     glfwInit();
+    
+    glfwSetErrorCallback(errorCB);
+    
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // Version 3.3
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
