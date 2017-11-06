@@ -30,7 +30,7 @@ Vao::Vao(const std::vector<unsigned> & signature,
     if (useEbo)
         count = indicesSize;
     else
-        count = verticesSize / sigSum;
+        count = verticesSize / (sigSum*sizeof(GLfloat));
 
     // ===== Create VAO, VBO, EBO
 
