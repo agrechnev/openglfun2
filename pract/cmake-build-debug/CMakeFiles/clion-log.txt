@@ -1,0 +1,7 @@
+"D:\prog\JetBrains\CLion 2016.3.2\bin\cmake\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" D:\alex\clion\openglfun2\pract
+OPENGL_gl_LIBRARY = opengl32
+OPENGLu_gl_LIBRARY = glu32
+GL_LIBS = D:/msys32/mingw32/lib/libglew32.dll.a;D:/msys32/mingw32/lib/libglfw3.dll.a;opengl32
+-- Configuring done
+-- Generating done
+-- Build files have been written to: D:/alex/clion/openglfun2/pract/cmake-build-debug

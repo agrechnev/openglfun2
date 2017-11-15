@@ -12,13 +12,13 @@
 #include <string>
 
 //=============================================================
-static void fatal(const char * msg){
+static void fatal(const string & msg){
     std::cerr << msg << std::endl;
     glfwTerminate();
     exit(-1);
 }
 //=============================================================
-static void fatal2(const char * msg1, const char * msg2){
+static void fatal2(const string & msg1, const string & msg2){
     std::cerr << msg1 << " : " << std::endl;
     glfwTerminate();
     exit(-1);
