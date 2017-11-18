@@ -1,2 +1,0 @@
-D:\msys32\mingw32\bin\ar.exe qc libMotokoGL.a  CMakeFiles/MotokoGL.dir/Window.cpp.obj CMakeFiles/MotokoGL.dir/ShaderProg.cpp.obj CMakeFiles/MotokoGL.dir/Vao.cpp.obj CMakeFiles/MotokoGL.dir/Tex.cpp.obj CMakeFiles/MotokoGL.dir/stb_image.cpp.obj
-D:\msys32\mingw32\bin\ranlib.exe libMotokoGL.a
