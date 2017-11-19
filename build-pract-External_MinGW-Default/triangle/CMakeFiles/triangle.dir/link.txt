@@ -1,3 +1,0 @@
-D:\msys64\mingw64\bin\cmake.exe -E remove -f CMakeFiles\triangle.dir/objects.a
-D:\msys64\mingw64\bin\ar.exe cr CMakeFiles\triangle.dir/objects.a @CMakeFiles\triangle.dir\objects1.rsp
-D:\msys64\mingw64\bin\g++.exe    -Wl,--whole-archive CMakeFiles\triangle.dir/objects.a -Wl,--no-whole-archive  -o triangle.exe -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\triangle.dir\linklibs.rsp
