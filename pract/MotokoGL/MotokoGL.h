@@ -4,7 +4,7 @@
 // ALl MotokoGL headers
 
 #include "./glheader.h"
-#include "./fatal.h"
+#include "./MotokoError.h"
 #include "./Window.h"
 #include "./ShaderProg.h"
 #include "./Vao.h"

@@ -1,6 +1,9 @@
 #pragma once
 // By Oleksiy Grechnyev
 
+#include <chrono>
+#include <string>
+
 #include "./glheader.h"
 
 namespace MotokoGL{
@@ -9,7 +12,12 @@ class Window
 {
 public: //======== Methods
     /// Constructor
-    Window(int w, int h, const char *title);
+    Window(int w, int h, const std::string & title, int vMajor = 3, int vMinor = 3);
+
+    /// Destructor
+    ~Window() {
+        glfwTerminate(); // Stop openGL
+    }
 
     /// Swap the buffers
     void swapBuffers() {
@@ -31,14 +39,18 @@ public: //======== Methods
         return height;
     }
 
+    /// Get time in seconds since the window was created
+    double time();
+
 private: //========= Fields
     /// The Window pointer
     GLFWwindow * win = nullptr;
 
     /// Viewport Width and height
     int width=0, height=0;
+
+    /// The start time
+    std::chrono::time_point<std::chrono::high_resolution_clock> time0 =
+            std::chrono::high_resolution_clock::now();
 };
-
-
-
 }

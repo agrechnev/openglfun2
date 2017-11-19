@@ -26,6 +26,11 @@ public: //==== Static factory methods
     static ShaderProg fromFiles(const std::string & vertexFileName, const std::string & fragmentFileName);
 
 public: //==== Methods
+    /// Destructor
+    ~ShaderProg() {
+        glDeleteProgram(prog);
+    }
+
     /// Use this shader prog
     void use() const{
         glUseProgram(prog);
@@ -38,21 +43,21 @@ public: //==== Methods
 
     /// Set cam and model  matrices (uniforms uCam, uModel)
     void setMatCM(const glm::mat4 & cam, const glm::mat4 & model){
-        glUniformMatrix4fv(uCam, 1, GL_FALSE, value_ptr(cam));
-        glUniformMatrix4fv(uModel, 1, GL_FALSE, value_ptr(model));
+        glUniformMatrix4fv(uCam, 1, GL_FALSE, glm::value_ptr(cam));
+        glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(model));
     }
 
     /// Set model, view, proj matrices (uniforms uModel, uView, uProj)
     void setMatMVP(const glm::mat4 & model, const glm::mat4 & view, const glm::mat4 & proj){
-        glUniformMatrix4fv(uModel, 1, GL_FALSE, value_ptr(model));
-        glUniformMatrix4fv(uView, 1, GL_FALSE, value_ptr(view));
-        glUniformMatrix4fv(uProj, 1, GL_FALSE, value_ptr(proj));
+        glUniformMatrix4fv(uModel, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(uView, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(uProj, 1, GL_FALSE, glm::value_ptr(proj));
     }
 
     /// Set the normal matrix
     void setMatN(const glm::mat4 & model){
         glm::mat4 normal = glm::transpose(glm::inverse(model));
-        glUniformMatrix4fv(loc("uNorm"), 1, GL_FALSE, value_ptr(normal));
+        glUniformMatrix4fv(loc("uNorm"), 1, GL_FALSE, glm::value_ptr(normal));
     }
 
     /// Set the Material
@@ -93,7 +98,7 @@ public: //==== Methods
 
 private: //==== Methods
     // Read a whole file as a string
-    static std::shared_ptr<std::string> parseFile(const std::string & fileName);
+    static std::string parseFile(const std::string & fileName);
 
 private: //==== Fields
     /// The program's OpenGL id

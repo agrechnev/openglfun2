@@ -2,7 +2,7 @@
 #include <fstream>
 #include <streambuf>
 
-#include "./fatal.h"
+#include "./MotokoError.h"
 
 #include "./ShaderProg.h"
 
@@ -13,6 +13,8 @@ ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmen
 {
     ShaderProg newProg;
     GLuint & prog = newProg.prog;
+
+    using namespace std;
 
     // Create shaders and Compile
     // Vertex
@@ -26,7 +28,7 @@ ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmen
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        fatal2("Cannot compile vertex shader", infoLog);
+        throw MotokoError(string("ShaderProg::fromMem() : Cannot compile vertex shader") + infoLog);
     }
 
     // Fragment
@@ -38,7 +40,7 @@ ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmen
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        fatal2("Cannot compile fragment shader", infoLog);
+        throw MotokoError(string("ShaderProg::fromMem() : Cannot compile fragment shader") + infoLog);
     }
 
     // Shader program
@@ -50,7 +52,7 @@ ShaderProg ShaderProg::fromMem(const GLchar *vertexSource, const GLchar *fragmen
     glGetProgramiv(prog, GL_LINK_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(prog, 512, nullptr, infoLog);
-        fatal2("Cannot link shader program", infoLog);
+        throw MotokoError(string("ShaderProg::fromMem() : Cannot link shader program") + infoLog);
     }
 
     // Delete shaders
@@ -73,30 +75,23 @@ ShaderProg ShaderProg::fromFiles(const std::string & vertexFileName, const std::
     auto s1 = parseFile(vertexFileName);
     auto s2 = parseFile(fragmentFileName);
 
-    /*cout << "----------------" << endl;
-    cout << s1->c_str();
-    cout << "----------------" << endl;
-    cout << s2->c_str();
-    cout << "----------------" << endl;*/
-
-    ShaderProg newProg = ShaderProg::fromMem(s1->c_str(), s2->c_str());
+    ShaderProg newProg = ShaderProg::fromMem(s1.c_str(), s2.c_str());
     return newProg;
 }
 //==============================================================
-std::shared_ptr<std::string> ShaderProg::parseFile(const std::string &fileName)
+std::string ShaderProg::parseFile(const std::string &fileName)
 {
     using namespace std;
-
     ifstream in(fileName);
-
     if (!in)
-        fatal2("ShaderProg::parseFile() : cannot open file ", fileName.c_str());
-
-    shared_ptr<string> s = make_shared<string>((istreambuf_iterator<char>(in)), istreambuf_iterator<char>());
-
-    in.close();
-
-    return s;
+        throw MotokoError("ShaderProg::parseFile() : cannot open file " + fileName);
+    string result, line;
+    while (getline(in, line)) {
+        result.append(line);
+        result.push_back('\n');    // EOL-safe version
+    }
+    return result;
+//    return string((istreambuf_iterator<char>(in)), istreambuf_iterator<char>()); // Simplest
 }
 //==============================================================
 

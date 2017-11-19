@@ -1,11 +1,12 @@
 #include <iostream>
 
-#include "fatal.h"
+
+#include "MotokoError.h"
 
 #include "Window.h"
 
 namespace MotokoGL{
-Window::Window(int w, int h, const char *title)
+Window::Window(int w, int h, const std::string & title, int vMajor, int vMinor)
 {
     // Init GLFW
     glfwInit();
@@ -16,23 +17,25 @@ Window::Window(int w, int h, const char *title)
     });
 
     // Set parameters
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);  // Version 3.3
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, vMajor);  // Version, 3.3 is default
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, vMinor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE); // Do we need it ?
 
     // Create GLFW window
-    win = glfwCreateWindow(w, h, title, nullptr, nullptr);
+    win = glfwCreateWindow(w, h, title.c_str() , nullptr, nullptr);
     if (win == nullptr)
-        fatal("Cannot create GLFW window !");
+        throw MotokoError("Cannot create GLFW window !");
 
     glfwMakeContextCurrent(win); // Doesn't work without it ;)
 
     // Init GLEW
+#ifndef __APPLE__
     glewExperimental = GL_TRUE;
     if (glewInit() != GLEW_OK)
-        fatal("Cannot initialize GLEW !");
+        throw MotokoError("Cannot initialize GLEW !");
+#endif
 
     // From now on
     // Set viewport (should be equal to the window size)
@@ -40,6 +43,13 @@ Window::Window(int w, int h, const char *title)
 
     // The first OpenGL function call: init viewport
     glViewport(0, 0, width, height);
+}
+
+double Window::time()
+{
+    using namespace std::chrono;
+    auto time = high_resolution_clock::now();
+    return duration<double>(time - time0).count();  // time difference
 }
 
 }

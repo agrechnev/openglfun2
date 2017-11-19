@@ -23,4 +23,5 @@ add_subdirectory(MotokoGL)
 
 # Build all subdirs
 add_subdirectory(p1)
+add_subdirectory(home1)
 add_subdirectory(triangle)
