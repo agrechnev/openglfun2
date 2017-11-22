@@ -6,7 +6,7 @@ set (CMAKE_CXX_STANDARD 14)
 # Find GLFW, GLEW
 FIND_LIBRARY(GLFW_LIB NAMES glfw glfw3 glfw.3.2)
 message("GLFW_LIB = ${GLFW_LIB}")
-if(NOT ${APPLE})
+if(NOT DEFINED ${APPLE})
     FIND_LIBRARY(GLEW_LIB NAMES glew GLEW glew32)
 endif()
 message("GLEW_LIB = ${GLEW_LIB}")
@@ -29,5 +29,6 @@ include_directories(MotokoGL )
 
 # Build all targets
 add_subdirectory(p1)
+add_subdirectory(p2)
 add_subdirectory(home1)
 add_subdirectory(triangle)
