@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include "./stb_image.h"
 
 #include "./MotokoError.h"
@@ -29,7 +31,6 @@ namespace MotokoGL {
 
         // Bind
         glBindTexture(GL_TEXTURE_2D, t.tex);
-
         int bpp;
 
         // Load image from a file with SOIL
@@ -38,12 +39,19 @@ namespace MotokoGL {
         if (image == NULL)
             throw MotokoError("Tex::fromFile() : Cannot load image " + fileName);
 
+        // To avoid segfaults, WTF ???
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+        glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+        glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+
         // Set up the image
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, t.w, t.h, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
         glGenerateMipmap(GL_TEXTURE_2D);
 
         // Free memory and unbind
         stbi_image_free(image);
+//        free(image2);
         glBindTexture(GL_TEXTURE_2D, 0);
 
         return t;
