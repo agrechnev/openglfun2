@@ -13,6 +13,7 @@ set (SOURCE_FILES
       ./Vao.h ./Vao.cpp
       ./Tex.h ./Tex.cpp
       ./SimpleCamera.h
+      ./YPRCamera.h ./YPRCamera.cpp
       ./Material.h
       ./MaterialT.h
       ./MotokoGL.h

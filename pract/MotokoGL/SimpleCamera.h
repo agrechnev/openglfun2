@@ -11,29 +11,21 @@ public: //======== Methods
     // Create the camera matrix (proj*view) using our data
     virtual glm::mat4 matrix(){
         using namespace glm;
-//        vec3 dir = normalize(pos - target); // The camera direction (from target to pos)
-
-        // View matrix
-        mat4 view = lookAt(pos, target, up);
-
-        // Projection (perspective) matrix
-        mat4 proj = perspective(0.8f, aspect, zMin, zMax);
-
+        mat4 view = matrixView();  // View matrix
+        mat4 proj = matrixProj(); // Projection (perspective) matrix
         return proj*view;
     }
 
     // Create the view matrix
     virtual glm::mat4 matrixView(){
         using namespace glm;
-
         return lookAt(pos, target, up);
     }
 
     // Create the proj matrix
     virtual glm::mat4 matrixProj(){
         using namespace glm;
-
-        return perspective(0.8f, aspect, zMin, zMax);
+        return perspective(glm::radians(fovy), aspect, zMin, zMax);
     }
 
 public: //======== Getters + setters
@@ -70,8 +62,8 @@ public: //======== fields
     /// Min and max Z
     GLfloat zMin = 0.1f, zMax = 100.0f;
 
-    /// Field-Of-View Y in radians
-    GLfloat fovy = glm::radians(45.0f);
+    /// Field-Of-View Y in degrees
+    GLfloat fovy = 45.0f;
 
 protected: //======= fields
     /// Camera target

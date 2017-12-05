@@ -42,6 +42,14 @@ public: //======== Methods
     /// Get time in seconds since the window was created
     double time();
 
+    GLFWwindow * getWin() {
+        return win;
+    }
+
+    int getKey(int key){
+        return glfwGetKey(win, key);
+    }
+
 private: //========= Fields
     /// The Window pointer
     GLFWwindow * win = nullptr;
@@ -52,5 +60,6 @@ private: //========= Fields
     /// The start time
     std::chrono::time_point<std::chrono::high_resolution_clock> time0 =
             std::chrono::high_resolution_clock::now();
+
 };
 }
